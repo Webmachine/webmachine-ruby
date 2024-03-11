@@ -16,6 +16,9 @@ module Webmachine
   #     the response body
   def self.render_error(code, req, res, options = {})
     res.code = code
+    # The response cannot be encoded in render_error so the Content-Encoding
+    # header is removed here.
+    res.headers.delete CONTENT_ENCODING
     unless res.body
       title, message = t(["errors.#{code}.title", "errors.#{code}.message"],
         {method: req.method,
